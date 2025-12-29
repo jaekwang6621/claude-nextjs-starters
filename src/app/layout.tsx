@@ -15,9 +15,27 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'NextJS Starter - 모던 웹 스타터킷',
+  title: {
+    default: 'B2B AI Agent Platform',
+    template: '%s - B2B AI Agent Platform',
+  },
   description:
-    'Next.js 15, TypeScript, TailwindCSS, ShadcnUI로 구축된 프로덕션 준비가 완료된 웹 애플리케이션 스타터킷',
+    'AI 에이전트 오케스트레이션 시스템과 전문 에이전트를 통해 비즈니스 프로세스를 자동화하세요',
+  keywords: [
+    'AI 에이전트',
+    'B2B',
+    '오케스트레이션',
+    '자동화',
+    '리더 에이전트',
+    '캐릭터챗',
+    '프루프리딩',
+  ],
+  openGraph: {
+    title: 'B2B AI Agent Platform',
+    description: 'AI 에이전트 오케스트레이션 시스템과 전문 에이전트',
+    type: 'website',
+    locale: 'ko_KR',
+  },
 }
 
 export default function RootLayout({

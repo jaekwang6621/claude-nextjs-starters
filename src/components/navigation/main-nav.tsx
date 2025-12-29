@@ -11,6 +11,11 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { title: '홈', href: '/' },
+  { title: 'Orchestration System', href: '/orchestration' },
+  { title: '리더 에이전트', href: '/leader-agent' },
+  { title: '캐릭터챗 에이전트', href: '/characterchat-agent' },
+  { title: '프루프 리딩 에이전트', href: '/proofreading-agent' },
+  { title: '문의하기', href: '/contact' },
 ]
 
 export function MainNav() {
