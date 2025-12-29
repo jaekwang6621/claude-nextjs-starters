@@ -1,6 +1,6 @@
 # React Hook Form + Zod + Server Actions 완전 가이드
 
-이 문서는 Next.js 15.5.3에서 React Hook Form + Zod + Server Actions를 활용한 최적의 폼 처리 패턴을 제공합니다.
+이 문서는 Next.js 16.1.1에서 React Hook Form + Zod + Server Actions를 활용한 최적의 폼 처리 패턴을 제공합니다.
 
 ## 🚀 기본 설정 및 셋업
 
@@ -88,11 +88,11 @@ export const registerSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string(),
-    terms: z.boolean().refine((val) => val === true, {
+    terms: z.boolean().refine(val => val === true, {
       message: '이용약관에 동의해주세요',
     }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다',
     path: ['confirmPassword'],
   })
@@ -151,7 +151,11 @@ async function hashPassword(password: string) {
   return `hashed_${password}`
 }
 
-async function createUser(userData: { name: string; email: string; password: string }) {
+async function createUser(userData: {
+  name: string
+  email: string
+  password: string
+}) {
   // TODO: 실제 데이터베이스에 사용자 생성
   const newUser = {
     id: Date.now().toString(),
@@ -1328,7 +1332,11 @@ import { headers } from 'next/headers'
 
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>()
 
-export async function checkRateLimit(identifier: string, limit = 5, window = 60000) {
+export async function checkRateLimit(
+  identifier: string,
+  limit = 5,
+  window = 60000
+) {
   const now = Date.now()
   const record = rateLimitMap.get(identifier)
 
@@ -1350,7 +1358,7 @@ export async function rateLimitedAction(formData: FormData) {
   const headersList = await headers()
   const ip = headersList.get('x-forwarded-for') || 'unknown'
 
-  if (!await checkRateLimit(ip)) {
+  if (!(await checkRateLimit(ip))) {
     return {
       success: false,
       message: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.',
@@ -1496,7 +1504,7 @@ export async function submitProfileAction(formData: FormData) {
 }
 
 // app/actions/documents.ts
-'use server'
+;('use server')
 
 export async function submitDocumentAction(formData: FormData) {
   try {
@@ -1516,7 +1524,7 @@ export async function submitDocumentAction(formData: FormData) {
 }
 
 // app/actions/drafts.ts
-'use server'
+;('use server')
 
 export async function saveDraftAction(draftId: string, data: any) {
   try {

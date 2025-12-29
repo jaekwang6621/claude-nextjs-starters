@@ -1,6 +1,6 @@
 # 컴포넌트 패턴 가이드
 
-이 문서는 Next.js 15.5.3 + React 19 환경에서 효율적이고 재사용 가능한 컴포넌트 작성 패턴을 제공합니다.
+이 문서는 Next.js 16.1.1 + React 19.2.3 환경에서 효율적이고 재사용 가능한 컴포넌트 작성 패턴을 제공합니다.
 
 ## 🧩 기본 설계 원칙
 
@@ -19,10 +19,12 @@ export function UserAvatar({ user, size = 'md' }) {
 
 export function UserStatus({ isOnline }) {
   return (
-    <div className={cn(
-      "h-3 w-3 rounded-full",
-      isOnline ? "bg-green-500" : "bg-gray-400"
-    )} />
+    <div
+      className={cn(
+        'h-3 w-3 rounded-full',
+        isOnline ? 'bg-green-500' : 'bg-gray-400'
+      )}
+    />
   )
 }
 
@@ -117,7 +119,7 @@ export function UserSearchForm() {
     <div>
       <input
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={e => setQuery(e.target.value)}
         placeholder="사용자 검색..."
       />
       <SearchResults results={results} />
@@ -129,7 +131,7 @@ export function UserSearchForm() {
 export function UserForm() {
   const [state, formAction, isPending] = useActionState(updateUserAction, {
     success: false,
-    message: ''
+    message: '',
   })
 
   return (
@@ -164,7 +166,7 @@ export default async function ProductPage({ params }) {
 }
 
 // 클라이언트 컴포넌트는 별도 파일로 분리
-'use client'
+;('use client')
 export function ProductInteractions({ productId }) {
   const [liked, setLiked] = useState(false)
   // 상호작용 로직...
@@ -179,7 +181,13 @@ export function ProductInteractions({ productId }) {
 // ✅ 명확한 Props 타입 정의
 interface ButtonProps {
   children: React.ReactNode
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
   size?: 'default' | 'sm' | 'lg' | 'icon'
   disabled?: boolean
   loading?: boolean
@@ -253,7 +261,11 @@ export function Text<T extends React.ElementType = 'p'>({
 // ✅ Render Props 패턴
 interface DataFetcherProps<T> {
   url: string
-  children: (data: T | null, loading: boolean, error: Error | null) => React.ReactNode
+  children: (
+    data: T | null,
+    loading: boolean,
+    error: Error | null
+  ) => React.ReactNode
 }
 
 export function DataFetcher<T>({ url, children }: DataFetcherProps<T>) {
@@ -262,14 +274,17 @@ export function DataFetcher<T>({ url, children }: DataFetcherProps<T>) {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    fetchData(url).then(setData).catch(setError).finally(() => setLoading(false))
+    fetchData(url)
+      .then(setData)
+      .catch(setError)
+      .finally(() => setLoading(false))
   }, [url])
 
   return children(data, loading, error)
 }
 
 // 사용법
-<DataFetcher<User[]> url="/api/users">
+;<DataFetcher<User[]> url="/api/users">
   {(users, loading, error) => {
     if (loading) return <Spinner />
     if (error) return <ErrorMessage error={error} />
@@ -313,7 +328,13 @@ interface CardProps extends VariantProps<typeof cardVariants> {
   className?: string
 }
 
-export function Card({ variant, size, className, children, ...props }: CardProps) {
+export function Card({
+  variant,
+  size,
+  className,
+  children,
+  ...props
+}: CardProps) {
   return (
     <div className={cn(cardVariants({ variant, size }), className)} {...props}>
       {children}
@@ -379,7 +400,7 @@ export function AccordionContent({ children, value }) {
 }
 
 // 사용법
-<Accordion type="multiple">
+;<Accordion type="multiple">
   <AccordionItem value="item-1">
     <AccordionTrigger value="item-1">질문 1</AccordionTrigger>
     <AccordionContent value="item-1">답변 1</AccordionContent>
@@ -397,7 +418,7 @@ import { memo, useMemo, useCallback } from 'react'
 // ✅ React.memo로 불필요한 리렌더링 방지
 export const ExpensiveComponent = memo(function ExpensiveComponent({
   data,
-  onUpdate
+  onUpdate,
 }: {
   data: ComplexData[]
   onUpdate: (id: string) => void
@@ -406,14 +427,17 @@ export const ExpensiveComponent = memo(function ExpensiveComponent({
   const processedData = useMemo(() => {
     return data.map(item => ({
       ...item,
-      calculated: expensiveCalculation(item)
+      calculated: expensiveCalculation(item),
     }))
   }, [data])
 
   // 콜백 함수 메모이제이션
-  const handleUpdate = useCallback((id: string) => {
-    onUpdate(id)
-  }, [onUpdate])
+  const handleUpdate = useCallback(
+    (id: string) => {
+      onUpdate(id)
+    },
+    [onUpdate]
+  )
 
   return (
     <div>
@@ -463,7 +487,11 @@ interface VirtualizedListProps {
   height: number
 }
 
-export function VirtualizedList({ items, itemHeight, height }: VirtualizedListProps) {
+export function VirtualizedList({
+  items,
+  itemHeight,
+  height,
+}: VirtualizedListProps) {
   const Row = ({ index, style }) => (
     <div style={style}>
       <ListItem item={items[index]} />
@@ -471,11 +499,7 @@ export function VirtualizedList({ items, itemHeight, height }: VirtualizedListPr
   )
 
   return (
-    <List
-      height={height}
-      itemCount={items.length}
-      itemSize={itemHeight}
-    >
+    <List height={height} itemCount={items.length} itemSize={itemHeight}>
       {Row}
     </List>
   )
@@ -503,13 +527,15 @@ export function Select<T>({
   onChange,
   getLabel,
   getValue,
-  className
+  className,
 }: SelectProps<T>) {
   return (
     <select
       value={value ? getValue(value) : ''}
-      onChange={(e) => {
-        const selectedValue = options.find(option => getValue(option) === e.target.value)
+      onChange={e => {
+        const selectedValue = options.find(
+          option => getValue(option) === e.target.value
+        )
         if (selectedValue) onChange(selectedValue)
       }}
       className={className}
@@ -524,12 +550,12 @@ export function Select<T>({
 }
 
 // 사용법 (완전한 타입 추론)
-<Select<User>
+;<Select<User>
   options={users}
   value={selectedUser}
   onChange={setSelectedUser}
-  getLabel={(user) => user.name}
-  getValue={(user) => user.id}
+  getLabel={user => user.name}
+  getValue={user => user.id}
 />
 ```
 
@@ -542,8 +568,7 @@ type ButtonProps<T extends boolean = false> = {
   loading?: T
 } & (T extends true
   ? { onClick?: never; disabled?: boolean }
-  : { onClick: () => void; disabled?: boolean }
-)
+  : { onClick: () => void; disabled?: boolean })
 
 export function Button<T extends boolean = false>(props: ButtonProps<T>) {
   const { children, loading, onClick, disabled, ...restProps } = props
@@ -583,11 +608,7 @@ export function Modal({ children }) {
   return (
     <>
       <button onClick={open}>모달 열기</button>
-      {isOpen && (
-        <Dialog onClose={close}>
-          {children}
-        </Dialog>
-      )}
+      {isOpen && <Dialog onClose={close}>{children}</Dialog>}
     </>
   )
 }
@@ -614,7 +635,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         ...state,
         items: [...state.items, action.payload],
-        total: calculateTotal([...state.items, action.payload])
+        total: calculateTotal([...state.items, action.payload]),
       }
     // 다른 케이스들...
     default:
@@ -653,7 +674,16 @@ export function useCart() {
 ```tsx
 // 너무 많은 props
 function OverloadedComponent({
-  prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10
+  prop1,
+  prop2,
+  prop3,
+  prop4,
+  prop5,
+  prop6,
+  prop7,
+  prop8,
+  prop9,
+  prop10,
 }) {
   // 너무 많은 책임
 }
@@ -673,11 +703,7 @@ function Level2({ user }) {
 // 거대한 컴포넌트
 function GiantComponent() {
   // 500줄 이상의 JSX와 로직
-  return (
-    <div>
-      {/* 엄청난 양의 JSX */}
-    </div>
-  )
+  return <div>{/* 엄청난 양의 JSX */}</div>
 }
 
 // 불필요한 래핑
@@ -701,31 +727,37 @@ function BadComponent() {
 새 컴포넌트 작성 시 확인사항:
 
 ### 설계
+
 - [ ] 단일 책임 원칙 준수
 - [ ] 적절한 컴포지션 활용
 - [ ] 재사용 가능성 고려
 
 ### 타입 안전성
+
 - [ ] Props 인터페이스 정의
 - [ ] 제네릭 활용 (필요시)
 - [ ] 조건부 타입 활용 (필요시)
 
 ### 성능
+
 - [ ] 불필요한 리렌더링 방지
 - [ ] 메모이제이션 적절히 활용
 - [ ] 큰 리스트 가상화 고려
 
 ### Server/Client 분리
+
 - [ ] Server Component 우선 고려
 - [ ] 'use client' 최소화
 - [ ] 적절한 경계 설정
 
 ### 접근성
+
 - [ ] 의미있는 HTML 태그 사용
 - [ ] ARIA 속성 추가
 - [ ] 키보드 네비게이션 지원
 
 ### 코드 품질
+
 - [ ] ESLint 규칙 준수
 - [ ] 300줄 이하 유지
 - [ ] 명확한 네이밍
