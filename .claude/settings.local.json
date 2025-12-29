@@ -18,30 +18,9 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "playwright"
-  ],
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/notification-hook.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-hook.sh"
-          }
-        ]
-      }
-    ]
-  }
+    "playwright",
+    "context7",
+    "sequential-thinking",
+    "shadcn"
+  ]
 }
