@@ -24,6 +24,12 @@
   /* Typography - Pretendard Font */
   --font-pretendard: 'Pretendard Variable', var(--font-geist-sans), sans-serif;
 
+  /* Typography - Stack Sans Headline (using Inter as fallback) */
+  --font-stack-sans-headline: 'Inter', var(--font-geist-sans), sans-serif;
+
+  /* Accent Blue Color */
+  --color-accent-blue: #3aa0ff;
+
   /* Existing shadcn/ui colors */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -135,5 +141,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background: linear-gradient(180deg, #a8cce8 0%, #f6f7f8 100%);
   }
 }
